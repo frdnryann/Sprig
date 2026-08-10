@@ -56,12 +56,12 @@ git clone https://github.com/frdnryann/website-sekumlah.git
 
 #### 2. Install Tailwindcss (V3.4.19)
 ```
-// Download file binary tailwindcss
+// Download file binary tailwindcss (Sesuaikan dengan OS yang dipakai)
 curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-linux-x64
 
 // izinkan pengeksekusian file
-chmod +x tailwindcss-macos-arm64
+chmod +x tailwindcss-linux-x64
 
 // ubah nama
-mv tailwindcss-macos-arm64 tailwindcss
+mv tailwindcss-linux-x64 tailwindcss
 ```
