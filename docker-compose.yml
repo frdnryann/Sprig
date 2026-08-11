@@ -1,0 +1,69 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/golang/Dockerfile
+    container_name: smpgemah-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-root}
+      DB_NAME: ${DB_DATABASE:-smpgemah_db}
+      APP_PORT: 8080
+    depends_on:
+      - mysql
+    networks:
+      - smpgemahapp-network
+
+  mysql:
+    image: mysql:8.4
+    container_name: smpgemah-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_DATABASE:-smpgemah_db}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:Z
+    networks:
+      - smpgemahapp-network
+    deploy:
+      resources:
+        limits:
+          # Testing Environment (ubah pas udah di deploy)
+          cpus: '1.0'
+          memory: 2048M
+
+  adminer:
+    image: adminer:latest
+    container_name: smpgemah-adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+      ADMINER_DEFAULT_USER: ${DB_USERNAME:-root}
+      ADMINER_DEFAULT_PASSWORD: ${DB_PASSWORD:-root}
+    depends_on:
+      - mysql
+    networks:
+      - smpgemahapp-network
+    deploy:
+      resources:
+        limits:
+          # Testing Environment (ubah pas udah di deploy)
+          cpus: '0.1'
+          memory: 64M
+
+volumes:
+  dbdata:
+
+networks:
+  smpgemahapp-network:
+    driver: bridge
