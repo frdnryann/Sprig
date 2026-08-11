@@ -2,7 +2,7 @@
 
 Aplikasi untuk mengatur keuangan yang sebelumnya tertunda proses pembuatannya. Kini dibuat ulang dengan menggunakan bahasa pemrograman Golang
 
-# Featured
+# Features
 
 Stay Tuned ya.., heheheha
 
