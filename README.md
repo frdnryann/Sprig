@@ -1,6 +1,10 @@
-# Website Sekumlah
+# Go-Financial (Nama sementara)
 
-Tanpa basa basi, website ini digunakan buat apa (Udah jelas dari judulnya juga). Langsung ke bagian teknisnya saja
+Aplikasi untuk mengatur keuangan yang sebelumnya tertunda proses pembuatannya. Kini dibuat ulang dengan menggunakan bahasa pemrograman Golang
+
+# Featured
+
+Stay Tuned ya.., heheheha
 
 
 ## Struktur Project
@@ -8,19 +12,27 @@ Tanpa basa basi, website ini digunakan buat apa (Udah jelas dari judulnya juga).
 ```
 root-folder
 -> cmd
-    -> main.go // main file (tempat semua nya dirakit)
+    -> web
+        -> main.go // main file (tempat semua nya dirakit)
+-> docker
+    -> golang
+        -> Dockerfile
+    -> mysql
+        -> my.cnf
 -> internal
-    -> announcements // bagian dari fitur website (CRUD)
     -> config // konfigurasi dasar yang diambil dari .env
+    -> features // bagian dari fitur website (CRUD)
+        -> feat-1
+        -> feat-2
     -> model // model database
     -> router // yaa.., ini router
-    -> teachers // bagian dari fitur website (CRUD)
 -> migration
 -> static
 -> views
 -> go.mod
 -> go.sum
--> tailwind.config.js // standaalone CLI installation
+-> tailwind.config.js // standalone CLI installation
+-> ...
 ```
 
 ## Tools yang digunakan
@@ -50,18 +62,37 @@ root-folder
 
 ## Instalasi
 ##### 1. Clone Repository ini
-```
-git clone https://github.com/frdnryann/website-sekumlah.git
+```bash
+git clone https://github.com/frdnryann/Go-financial.git
 ```
 
-#### 2. Install Tailwindcss (V3.4.19)
+#### 2. Install Image & Container docker untuk project
+```bash
+sudo docker compose up -d --build
+
+# Cara menghentikan container yang aktif
+sudo docker compose stop
+
+# Ingin sekalian menghapus container ?
+sudo docker compose down
+``` 
+
+#### 3. Install package yang dibutuhkan golang
+```bash
+go mod download
+
+# Ingin package nya disimpan di local ?
+go mod vendor
 ```
-// Download file binary tailwindcss (Sesuaikan dengan OS yang dipakai)
+
+#### 4. Install Tailwindcss (V3.4.19)
+```bash
+# Download file binary tailwindcss (Sesuaikan dengan OS yang dipakai)
 curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-linux-x64
 
-// izinkan pengeksekusian file
+# izinkan pengeksekusian file
 chmod +x tailwindcss-linux-x64
 
-// ubah nama
+# ubah nama
 mv tailwindcss-linux-x64 tailwindcss
 ```
