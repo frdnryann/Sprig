@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/golang/Dockerfile
-    container_name: smpgemah-app
+    container_name: gofinancial-app
     ports:
       - "8080:8080"
     environment:
@@ -11,28 +11,28 @@ services:
       DB_PORT: 3306
       DB_USER: ${DB_USERNAME:-root}
       DB_PASSWORD: ${DB_PASSWORD:-root}
-      DB_NAME: ${DB_DATABASE:-smpgemah_db}
+      DB_NAME: ${DB_DATABASE:-gofinancial_db}
       APP_PORT: 8080
     depends_on:
       - mysql
     networks:
-      - smpgemahapp-network
+      - gofinancialapp-network
 
   mysql:
     image: mysql:8.4
-    container_name: smpgemah-mysql
+    container_name: gofinancial-mysql
     restart: unless-stopped
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
-      MYSQL_DATABASE: ${DB_DATABASE:-smpgemah_db}
+      MYSQL_DATABASE: ${DB_DATABASE:-gofinancial_db}
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
       - dbdata:/var/lib/mysql
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:Z
     networks:
-      - smpgemahapp-network
+      - gofinancialapp-network
     deploy:
       resources:
         limits:
@@ -42,7 +42,7 @@ services:
 
   adminer:
     image: adminer:latest
-    container_name: smpgemah-adminer
+    container_name: gofinancial-adminer
     restart: unless-stopped
     ports:
       - "8081:8080"
@@ -53,7 +53,7 @@ services:
     depends_on:
       - mysql
     networks:
-      - smpgemahapp-network
+      - gofinancialapp-network
     deploy:
       resources:
         limits:
@@ -65,5 +65,5 @@ volumes:
   dbdata:
 
 networks:
-  smpgemahapp-network:
+  gofinancialapp-network:
     driver: bridge
