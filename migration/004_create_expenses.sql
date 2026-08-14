@@ -9,6 +9,7 @@ CREATE TABLE
         amount BIGINT UNSIGNED NOT NULL,
         description VARCHAR(255),
         expense_date DATE NOT NULL,
+        type ENUM('pengeluaran', 'pemasukan') NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         CONSTRAINT fk_expenses_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,

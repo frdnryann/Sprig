@@ -2,10 +2,22 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"go-financial/internal/config"
 	"net/http"
 )
 
 func main() {
+	cfg := config.LoadConfig()
+
+	// mysql connection
+	db, err := config.OpenConnection(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer db.Close()
+
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +30,8 @@ func main() {
 		Handler: mux,
 	}
 
-	err := server.ListenAndServe()
+	log.Printf("Server berjalan di port : %s", server.Addr)
+	err = server.ListenAndServe()
 	if err != nil {
 		panic(err)
 	}
