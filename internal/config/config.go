@@ -8,6 +8,9 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	// "github.com/golang-migrate/migrate/v4"
+	// "github.com/golang-migrate/migrate/v4/database/mysql"
+	// _ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/joho/godotenv"
 )
 
@@ -51,9 +54,31 @@ func OpenConnection(cfg *Config) (*sql.DB, error) {
 		return nil, fmt.Errorf("Gagal membuka database : %w", err)
 	}
 
-	// if err := db.Ping(); err != nil {
-	// 	return nil, fmt.Errorf("Gagal terhubung ke database : %w", err)
+	if err := db.Ping(); err != nil {
+		return nil, fmt.Errorf("Gagal terhubung ke database : %w", err)
+	}
+
+	// ---- AUTO MIGRATE DATABASE
+	// driver, err := mysql.WithInstance(db, &mysql.Config{})
+	// if err != nil {
+	// 	log.Fatalf("Gagal membuat driver database : %v", err)
 	// }
+
+	// m, err := migrate.NewWithDatabaseInstance(
+	// 	"file://migrations",
+	// 	"mysql",
+	// 	driver,
+	// )
+	// if err != nil {
+	// 	log.Fatalf("Gagal init migrate : %v", err)
+	// }
+
+	// if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+	// 	log.Fatalf("Gagal menjalankan migrasi database : %v", err)
+	// }
+
+	// log.Println("migrasi berhasil / sudah up-to-date")
+	// ---- END
 
 	db.SetMaxIdleConns(10)                  // kalau lagi bengong, minimal buka koneksinya brp..
 	db.SetMaxOpenConns(100)                 // maksimal buka koneksi

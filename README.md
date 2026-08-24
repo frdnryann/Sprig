@@ -43,24 +43,27 @@ root-folder
         <th>Backend</th>
     </tr>
     <tr>
-        <td><a href="#">HTMX</a></td>
-        <td><a href="#">Golang (Vanilla)</a></td>
+        <td><a href="https://htmx.org/docs/">HTMX</a></td>
+        <td><a href="https://go.dev/">Golang (Vanilla)</a></td>
     </tr>
     <tr>
-        <td><a href="#">Templ</a></td>
-        <td><a href="#">MySQL</a></td>
+        <td><a href="https://templ.guide/">Templ</a></td>
+        <td><a href="https://github.com/go-sql-driver/MYSQL">MySQL</a></td>
     </tr>
     <tr>
-        <td><a href="#">Tailwindcss (Standalone CLI installation)</a></td>
-        <td><a href="#">Docker</a></td>
+        <td><a href="https://tailwindcss.com/blog/standalone-cli">Tailwindcss (Standalone CLI installation)</a></td>
+        <td><a href="https://docs.docker.com/desktop/setup/install/windows-install/">Docker</a></td>
     </tr>
     <tr>
-        <td><a href="#">Quill</a></td>
-        <td><a href="#">-</a></td>
+        <td><a href="https://quilljs.com/docs/quickstart">Quill</a></td>
+        <td><a href="https://github.com/golang-migrate/migrate">Golang-migrate</a></td>
     </tr>
 </table>
 
 ## Instalasi
+
+Pastikan dikomputer mu sudah terinstall wsl, dan juga distro linux pilihanmu. Jika belum terinstall, silahkan install terlebih dahulu dengan membaca dokumentasi resmi dari microsoft [WSL Install](https://learn.microsoft.com/en-us/windows/wsl/install)
+
 ##### 1. Clone Repository ini
 ```bash
 git clone https://github.com/frdnryann/Go-financial.git
@@ -77,7 +80,17 @@ sudo docker compose stop
 sudo docker compose down
 ``` 
 
-#### 3. Install package yang dibutuhkan golang
+##### 3. Migrate Database
+```bash
+# Install dependensi yang dibutuhkan
+sudo apt install make
+
+# Migrate database
+sudo make migrate-up
+```
+> NOTE : Untuk detail penggunaan command migrasi database, silahkan baca list yang ada di dokumentasi ini [Migration Command List](/migrations/README.md)
+
+#### 4. Install package yang dibutuhkan golang
 ```bash
 go mod download
 
@@ -85,7 +98,7 @@ go mod download
 go mod vendor
 ```
 
-#### 4. Install Tailwindcss (V3.4.19)
+#### 5. Install Tailwindcss (V3.4.19)
 ```bash
 # Download file binary tailwindcss (Sesuaikan dengan OS yang dipakai)
 curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-linux-x64

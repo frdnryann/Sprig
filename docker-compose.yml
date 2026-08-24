@@ -78,6 +78,17 @@ services:
           cpus: '0.1'
           memory: 64M
 
+  migrate:
+    image: migrate/migrate
+    container_name: gofinancialapp_migration-tools
+    profiles: ["tools"]
+    volumes:
+      - ./migrations:/migrations
+    networks:
+      - gofinancialapp-network
+    depends_on:
+      - mysql
+
 volumes:
   dbdata:
 
