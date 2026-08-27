@@ -20,3 +20,7 @@ migrate-force:
 
 migrate-version:
 	docker compose run --rm migrate -path=/migrations -database="$(DSN)" version
+
+# go test path=...
+test:
+	docker compose run --rm test go test $(path) -v

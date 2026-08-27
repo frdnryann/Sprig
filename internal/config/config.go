@@ -11,7 +11,6 @@ import (
 	// "github.com/golang-migrate/migrate/v4"
 	// "github.com/golang-migrate/migrate/v4/database/mysql"
 	// _ "github.com/golang-migrate/migrate/v4/source/file"
-	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -20,16 +19,12 @@ type Config struct {
 
 // load config
 func LoadConfig() *Config {
-	if err := godotenv.Load("../../.env"); err != nil {
-		log.Println("Tidak menemukan file .env, pakai environment variable sistem!")
-	}
-
 	return &Config{
 		DBHost:     getEnv("DB_HOST", "localhost"), // Key + fallback
 		DBPort:     getEnv("DB_PORT", "3306"),
 		DBUsername: getEnv("DB_USERNAME", "root"),
 		DBPassword: getEnv("DB_PASSWORD", "root"),
-		DBName:     getEnv("DB_NAME", "gofinancial_db"),
+		DBName:     getEnv("DB_NAME", "gofinancial"),
 		AppPort:    getEnv("APP_PORT", "8080"),
 	}
 }
@@ -53,6 +48,8 @@ func OpenConnection(cfg *Config) (*sql.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Gagal membuka database : %w", err)
 	}
+
+	log.Printf("DSN DETAIL : %s", dsn)
 
 	if err := db.Ping(); err != nil {
 		return nil, fmt.Errorf("Gagal terhubung ke database : %w", err)

@@ -8,13 +8,7 @@ COPY go.mod go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
-# Install templ
-RUN --mount=type=cache,target=/go/pkg/mod \
-    go install github.com/a-h/templ/cmd/templ@latest
-
 COPY . .
-
-RUN templ generate
 
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
@@ -28,7 +22,7 @@ RUN apk add --no-cache ca-certificates
 WORKDIR /app
 
 COPY --from=builder /app/server .
-COPY --from=builder /app/static ./static
+# COPY --from=builder /app/static ./static
 
 EXPOSE 8080
 
