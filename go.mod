@@ -7,10 +7,7 @@ tool (
 	github.com/joho/godotenv/cmd/godotenv
 )
 
-require (
-	github.com/go-sql-driver/mysql v1.10.0
-	github.com/joho/godotenv v1.5.1
-)
+require github.com/go-sql-driver/mysql v1.10.0
 
 require (
 	filippo.io/edwards25519 v1.2.0 // indirect
@@ -22,6 +19,7 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/natefinch/atomic v1.0.1 // indirect
