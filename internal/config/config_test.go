@@ -3,7 +3,7 @@ package config_test
 import (
 	"context"
 	"fmt"
-	"go-financial/internal/config"
+	"sprig/internal/config"
 	"testing"
 )
 

@@ -3,7 +3,6 @@ package config
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -24,7 +23,7 @@ func LoadConfig() *Config {
 		DBPort:     getEnv("DB_PORT", "3306"),
 		DBUsername: getEnv("DB_USERNAME", "root"),
 		DBPassword: getEnv("DB_PASSWORD", "root"),
-		DBName:     getEnv("DB_NAME", "gofinancial"),
+		DBName:     getEnv("DB_NAME", "sprig_db"),
 		AppPort:    getEnv("APP_PORT", "8080"),
 	}
 }
@@ -49,7 +48,7 @@ func OpenConnection(cfg *Config) (*sql.DB, error) {
 		return nil, fmt.Errorf("Gagal membuka database : %w", err)
 	}
 
-	log.Printf("DSN DETAIL : %s", dsn)
+	// log.Printf("DSN DETAIL : %s", dsn)
 
 	if err := db.Ping(); err != nil {
 		return nil, fmt.Errorf("Gagal terhubung ke database : %w", err)

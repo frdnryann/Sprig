@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/golang/Dockerfile
-    container_name: gofinancial-app
+    container_name: sprig-app
     ports:
       - "8080:8080"
     environment:
@@ -11,23 +11,23 @@ services:
       DB_PORT: 3306
       DB_USERNAME: ${DB_USERNAME:-root}
       DB_PASSWORD: ${DB_PASSWORD:-root}
-      DB_NAME: ${DB_NAME:-gofinancial_db}
+      DB_NAME: ${DB_NAME:-sprig_db}
       APP_PORT: 8080
     depends_on:
       mysql:
         condition: service_healthy
     networks:
-      - gofinancialapp-network
+      - sprigapp-network
 
   mysql:
     image: mysql:8.4
-    container_name: gofinancial-mysql
+    container_name: sprig-mysql
     restart: unless-stopped
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
-      MYSQL_DATABASE: ${DB_DATABASE:-gofinancial_db}
+      MYSQL_DATABASE: ${DB_DATABASE:-sprig_db}
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot" ]
       interval: 5s
@@ -38,7 +38,7 @@ services:
       - dbdata:/var/lib/mysql
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:Z
     networks:
-      - gofinancialapp-network
+      - sprigapp-network
     deploy:
       resources:
         limits:
@@ -48,7 +48,7 @@ services:
 
   adminer:
     image: adminer:latest
-    container_name: gofinancial-adminer
+    container_name: sprig-adminer
     restart: unless-stopped
     ports:
       - "8081:8080"
@@ -59,7 +59,7 @@ services:
     depends_on:
       - mysql
     networks:
-      - gofinancialapp-network
+      - sprigapp-network
     deploy:
       resources:
         limits:
@@ -69,18 +69,18 @@ services:
 
   migrate:
     image: migrate/migrate
-    container_name: gofinancialapp_migration-tools
+    container_name: sprigapp_migration-tools
     profiles: [ "tools" ]
     volumes:
       - ./migrations:/migrations
     networks:
-      - gofinancialapp-network
+      - sprigapp-network
     depends_on:
       - mysql
 
   test:
     image: golang:1.26-alpine
-    container_name: gofinancialapp_test-tools
+    container_name: sprigapp_test-tools
     working_dir: /app
     profiles: [ "tools" ]
     volumes:
@@ -90,15 +90,15 @@ services:
       DB_PORT: 3306
       DB_USERNAME: ${DB_USERNAME:-root}
       DB_PASSWORD: ${DB_PASSWORD:-root}
-      DB_NAME: ${DB_NAME:-gofinancial_db}
+      DB_NAME: ${DB_NAME:-sprig_db}
     depends_on:
       - mysql
     networks:
-      - gofinancialapp-network
+      - sprigapp-network
 
 volumes:
   dbdata:
 
 networks:
-  gofinancialapp-network:
+  sprigapp-network:
     driver: bridge

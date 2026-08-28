@@ -1,4 +1,4 @@
-# Go-Financial (Nama sementara)
+# Sprig
 
 Aplikasi pengelolaan keuangan yang sempat tertunda pengerjaannya, kini dibangun ulang menggunakan bahasa pemrograman Golang.
 
