@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 	"sprig/internal/config"
-	"sprig/internal/features/categories"
+	// "sprig/internal/features/categories"
 	"sprig/internal/features/users"
 )
 
