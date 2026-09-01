@@ -24,3 +24,6 @@ migrate-version:
 # go test path=...
 test:
 	docker compose run --rm test go test $(path) -v
+
+swag-init:
+	swag init -g cmd/web/main.go --output cmd/web/docs
