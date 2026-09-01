@@ -116,10 +116,18 @@ go mod download
 go mod vendor
 ```
 
-##### Tambahan : Go Unit Test
+##### Tambahan : Go Unit Test & swagger
 ```bash
 sudo make test path=./file/destination
 
 # Contoh
 sudo make test path=./internal/config
+
+# Swagger 
+sudo make swag-init
+```
+
+##### Lihat list API
+```
+localhost:8080/swagger/
 ```
