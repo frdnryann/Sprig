@@ -1,0 +1,47 @@
+name: Swagger Documentation Notification
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "cmd/web/docs/swagger.json"
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl \
+            -H "Content-Type: application/json" \
+            -d '{
+              "embeds": [
+                {
+                  "title": "📚 API Documentation Updated",
+                  "description": "Swagger/OpenAPI documentation has been updated.",
+                  "fields": [
+                    {
+                      "name": "Repository",
+                      "value": "${{ github.repository }}",
+                      "inline": true
+                    },
+                    {
+                      "name": "Branch",
+                      "value": "${{ github.ref_name }}",
+                      "inline": true
+                    },
+                    {
+                      "name": "Author",
+                      "value": "${{ github.actor }}",
+                      "inline": true
+                    }
+                  ],
+                  "url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+                }
+              ]
+            }' \
+            "$DISCORD_WEBHOOK"
