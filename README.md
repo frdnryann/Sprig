@@ -9,7 +9,7 @@ Aplikasi pengelolaan keuangan yang sempat tertunda pengerjaannya, kini dibangun 
 - [Tools yang Digunakan](#tools-yang-digunakan)
 - [Instalasi](#instalasi)
   - [1. Clone Repository](#1-clone-repository-ini)
-  - [2. Konfigurasi .env](#2-)
+  - [2. Konfigurasi .env](#2-konfigurasi-env)
   - [3. Install Image & Jalankan Container Docker](#3-install-image--jalankan-container-docker-untuk-project)
   - [4. Migrasi Database](#4-migrasi-database)
   - [5. Install Package yang Dibutuhkan](#5-install-package-yang-dibutuhkan-golang)
