@@ -10,6 +10,14 @@ type CreateUserRequest struct {
 	Password string `json:"password"`
 }
 
+// CreateUserUpdateRequest berisi field yang dapat diperbarui melalui PATCH /users/{id}.
+//
+// Pointer digunakan untuk membedakan antara:
+//   - field tidak dikirim     → nil
+//   - field dikirim           → pointer ke nilai
+//
+// Dengan demikian, service dapat melakukan partial update tanpa
+// menimpa field yang tidak ingin diubah oleh client.
 type CreateUserUpdateRequest struct {
 	Name     *string `json:"name"`
 	Email    *string `json:"email"`

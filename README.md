@@ -9,10 +9,12 @@ Aplikasi pengelolaan keuangan yang sempat tertunda pengerjaannya, kini dibangun 
 - [Tools yang Digunakan](#tools-yang-digunakan)
 - [Instalasi](#instalasi)
   - [1. Clone Repository](#1-clone-repository-ini)
-  - [2. Install Image & Jalankan Container Docker](#2-install-image--jalankan-container-docker-untuk-project)
-  - [3. Migrasi Database](#3-migrasi-database)
-  - [4. Install Package yang Dibutuhkan](#4-install-package-yang-dibutuhkan-golang)
-  - [Tambahan: Go Unit Test](#tambahan--go-unit-test)
+  - [2. Konfigurasi .env](#2-)
+  - [3. Install Image & Jalankan Container Docker](#3-install-image--jalankan-container-docker-untuk-project)
+  - [4. Migrasi Database](#4-migrasi-database)
+  - [5. Install Package yang Dibutuhkan](#5-install-package-yang-dibutuhkan-golang)
+  - [Go Unit Test](#tambahan--go-unit-test)
+  - [Port & Route list](#port-list)
 
 ## Features
 
@@ -34,6 +36,7 @@ Aplikasi pengelolaan keuangan yang sempat tertunda pengerjaannya, kini dibangun 
 root-folder
 ├── cmd
 │   └── web
+│       ├── docs           // dokumentasi (swagger, dsb)
 │       └── main.go        // entry point (tempat semua komponen dirakit)
 ├── docker
 │   ├── golang
@@ -41,13 +44,23 @@ root-folder
 │   └── mysql
 │       └── my.cnf
 ├── internal
-│   ├── config              // konfigurasi dasar yang diambil dari .env
-│   ├── features             // masing-masing fitur aplikasi (CRUD)
-│   │   ├── feat-1
-│   │   └── feat-2
-│   ├── model                // model database
-│   └── router                // definisi routing
-├── migration
+│   ├── bootstrap           // inisialisasi/wiring aplikasi saat startup
+│   ├── common               // helper/utility yang dipakai lintas fitur
+│   ├── config                // konfigurasi dasar yang diambil dari .env
+│   ├── features                // masing-masing fitur aplikasi (CRUD)
+│   │   ├── budgets
+│   │   │   ├── dto.go
+│   │   │   ├── handler.go
+│   │   │   ├── repository.go
+│   │   │   ├── repository_mysql.go
+│   │   │   ├── route.go
+│   │   │   └── service.go
+│   │   ├── categories
+│   │   ├── expenses
+│   │   └── users
+│   ├── model                  // model database
+│   └── router                   // definisi routing
+├── migrations
 ├── go.mod
 ├── go.sum
 └── ...
@@ -55,28 +68,14 @@ root-folder
 
 ## Tools yang Digunakan
 
-<table>
-    <tr>
-        <th>Frontend</th>
-        <th>Backend</th>
-    </tr>
-    <tr>
-        <td><a href="https://htmx.org/docs/">HTMX</a></td>
-        <td><a href="https://go.dev/">Golang (Vanilla)</a></td>
-    </tr>
-    <tr>
-        <td><a href="https://templ.guide/">Templ</a></td>
-        <td><a href="https://github.com/go-sql-driver/MYSQL">MySQL</a></td>
-    </tr>
-    <tr>
-        <td><a href="https://tailwindcss.com/blog/standalone-cli">Tailwind CSS (Standalone CLI installation)</a></td>
-        <td><a href="https://docs.docker.com/desktop/setup/install/windows-install/">Docker</a></td>
-    </tr>
-    <tr>
-        <td><a href="https://quilljs.com/docs/quickstart">Quill</a></td>
-        <td><a href="https://github.com/golang-migrate/migrate">Golang-migrate</a></td>
-    </tr>
-</table>
+| Backend Tools |
+|---------------|
+| [`Golang`](https://go.dev/) |
+| [`MySQL`](https://github.com/go-sql-driver/mysql) |
+| [`Docker`](https://docs.docker.com/engine/install/) |
+| [`golang-migrate/migrate`](https://github.com/golang-migrate/migrate) |
+| [`swaggo/swag`](https://github.com/swaggo/swag) |
+| [`stretchr/testify`](https://github.com/stretchr/testify) |
 
 ## Instalasi
 
@@ -87,7 +86,24 @@ Pastikan di komputer kamu sudah terinstall WSL beserta distro Linux pilihanmu. J
 git clone https://github.com/frdnryann/Go-financial.git
 ```
 
-##### 2. Install Image & Jalankan Container Docker untuk Project
+##### 2. Konfigurasi .env
+```bash
+# Rename file .env.example
+mv .env.example .env
+```
+
+Konfigurasi sesuai dengan settingan production
+```bash
+APP_PORT=8080
+
+DB_HOST=mysql
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=sangat-rahasia(default: root)
+DB_NAME=sprig_db
+```
+
+##### 3. Install Image & Jalankan Container Docker untuk Project
 ```bash
 sudo docker compose up -d --build
 
@@ -98,7 +114,7 @@ sudo docker compose stop
 sudo docker compose down
 ```
 
-##### 3. Migrasi Database
+##### 4. Migrasi Database
 ```bash
 # Install dependensi yang dibutuhkan (jika belum terinstall)
 sudo apt install make
@@ -108,7 +124,7 @@ sudo make migrate-up
 ```
 > **NOTE:** Untuk detail penggunaan command migrasi database lainnya, silakan baca daftar lengkapnya di [Migration Command List](/migrations/README.md).
 
-##### 4. Install Package yang Dibutuhkan Golang
+##### 5. Install Package yang Dibutuhkan Golang
 ```bash
 go mod download
 
@@ -127,7 +143,10 @@ sudo make test path=./internal/config
 sudo make swag-init
 ```
 
-##### Lihat list API
-```
-localhost:8080/swagger/
-```
+##### Port list
+
+| Port & route | Tujuan |
+|--------------|--------|
+| `localhost:8080` | app |
+| `localhost:8080/swagger/` | Dokumentasi swagger |
+| `localhost:8081` | adminer (database manager) |
