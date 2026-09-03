@@ -146,7 +146,7 @@ func (h *UserHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 
-	var req CreateUserRequest
+	var req CreateUserUpdateRequest
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -161,6 +161,7 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusBadRequest, common.ErrorResponse{
 			Message: "invalid JSON",
 		})
+		return
 	}
 
 	user, err := h.userService.UpdateUser(id, req)
@@ -168,6 +169,7 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusUnprocessableEntity, common.ErrorResponse{
 			Message: err.Error(),
 		})
+		return
 	}
 
 	response := UserResponse{

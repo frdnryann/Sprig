@@ -20,7 +20,7 @@ func (r *userRepository) AddUser(user *model.User) error {
 		return errors.New("Data tidak boleh kosong!")
 	}
 
-	query := "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"
+	query := "INSERT INTO users (name, email, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?)"
 
 	now := time.Now()
 	result, err := r.db.Exec(
@@ -52,7 +52,7 @@ func (r *userRepository) FindByID(id uint64) (*model.User, error) {
 		return nil, errors.New("ID tidak boleh kosong!")
 	}
 
-	query := "SELECT id, name, email, created_at FROM users WHERE id = ?"
+	query := "SELECT id, name, email, password, created_at FROM users WHERE id = ?"
 	row := r.db.QueryRow(query, id)
 
 	var user model.User
@@ -61,6 +61,7 @@ func (r *userRepository) FindByID(id uint64) (*model.User, error) {
 		&user.ID,
 		&user.Name,
 		&user.Email,
+		&user.Password,
 		&user.CreatedAt,
 	)
 	if err != nil {
@@ -109,15 +110,19 @@ func (r *userRepository) FindAll() ([]model.User, error) {
 }
 
 func (r *userRepository) Save(user *model.User) error {
-	query := "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?"
+	query := "UPDATE users SET name = ?, email = ?, password = ?, updated_at = ? WHERE id = ?"
 
+	now := time.Now()
 	_, err := r.db.Exec(
 		query,
 		user.Name,
 		user.Email,
 		user.Password,
-		user.CreatedAt,
+		now,
+		user.ID,
 	)
+
+	user.UpdatedAt = now
 
 	return err
 }
