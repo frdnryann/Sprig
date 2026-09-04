@@ -1,5 +1,19 @@
 basePath: /
 definitions:
+  categories.CreateCategoryRequest:
+    properties:
+      name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  categories.CreateCategoryUpdateRequest:
+    properties:
+      name:
+        type: string
+      user_id:
+        type: integer
+    type: object
   common.ErrorResponse:
     properties:
       message:
@@ -20,11 +34,142 @@ definitions:
       password:
         type: string
     type: object
+  users.CreateUserUpdateRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
 info:
   contact: {}
   title: sprig API
   version: "1.0"
 paths:
+  /api/v1/categories:
+    get:
+      description: Mengembalikan daftar seluruh kategori
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Ambil semua kategori
+      tags:
+      - categories
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Data kategori baru
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/categories.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Tambah category baru
+      tags:
+      - categories
+  /api/v1/categories/{id}:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID Kategori
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Field yang ingin diupdate
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/categories.CreateCategoryUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Update sebagian data Kategori
+      tags:
+      - categories
+  /api/v1/categories/{name}:
+    delete:
+      parameters:
+      - description: Nama Kategori
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Hapus kategori
+      tags:
+      - categories
+    get:
+      parameters:
+      - description: Nama Kategori
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.SuccessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Ambil detail kategori berdasarkan Nama
+      tags:
+      - categories
   /api/v1/users:
     get:
       description: Mengembalikan daftar seluruh user
@@ -135,7 +280,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/users.CreateUserRequest'
+          $ref: '#/definitions/users.CreateUserUpdateRequest'
       produces:
       - application/json
       responses:

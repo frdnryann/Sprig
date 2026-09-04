@@ -17,13 +17,13 @@ func NewCategoryService(repository CategoryRepository) *CategoryService {
 }
 
 func (s *CategoryService) CreateCategory(req CreateCategoryRequest) (*model.Category, error) {
-	if strings.TrimSpace(*req.Name) == "" {
+	if strings.TrimSpace(req.Name) == "" {
 		return nil, errors.New("Nama harus diisi!")
 	}
 
 	category := &model.Category{
 		UserID: req.UserID,
-		Name:   *req.Name,
+		Name:   req.Name,
 	}
 
 	err := s.repository.AddCategory(category)
@@ -56,15 +56,19 @@ func (s *CategoryService) FindAllCategory() ([]model.Category, error) {
 	return categories, nil
 }
 
-func (s *CategoryService) UpdateCategory(id uint64, req CreateCategoryRequest) (*model.Category, error) {
+func (s *CategoryService) UpdateCategory(id uint64, req CreateCategoryUpdateRequest) (*model.Category, error) {
 	existingCategory, err := s.repository.FindByID(id)
 	if err != nil {
 		return nil, err
 	}
 
-	existingCategory = &model.Category{
-		Name: *req.Name,
+	if req.Name != nil && strings.TrimSpace(*req.Name) != "" {
+		existingCategory.Name = *req.Name
 	}
+
+	// existingCategory = &model.Category{
+	// 	Name: *req.Name,
+	// }
 
 	if err = s.repository.Save(existingCategory); err != nil {
 		return nil, err

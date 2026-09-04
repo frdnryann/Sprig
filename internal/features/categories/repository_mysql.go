@@ -5,6 +5,7 @@ import (
 	"errors"
 	"sprig/internal/model"
 	"strings"
+	"time"
 )
 
 type categoryRepository struct {
@@ -120,12 +121,17 @@ func (r *categoryRepository) FindAll() ([]model.Category, error) {
 }
 
 func (r *categoryRepository) Save(category *model.Category) error {
-	query := "UPDATE categories SET name = ? WHERE id = ?"
+	query := "UPDATE categories SET name = ?, updated_at = ? WHERE id = ?"
 
+	now := time.Now()
 	_, err := r.db.Exec(
 		query,
+		category.Name,
+		now,
 		category.ID,
 	)
+
+	category.UpdatedAt = now
 
 	return err
 }

@@ -10,9 +10,9 @@ import (
 	_ "sprig/cmd/web/docs"
 )
 
-// @title           sprig API
-// @version         1.0
-// @BasePath        /
+// @title		sprig API
+// @version	1.0
+// @BasePath	/
 func main() {
 	cfg := config.LoadConfig()
 

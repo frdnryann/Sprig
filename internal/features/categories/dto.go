@@ -1,6 +1,11 @@
 package categories
 
 type CreateCategoryRequest struct {
+	UserID uint64 `json:"user_id"`
+	Name   string `json:"name"`
+}
+
+type CreateCategoryUpdateRequest struct {
 	UserID uint64  `json:"user_id"`
 	Name   *string `json:"name"`
 }

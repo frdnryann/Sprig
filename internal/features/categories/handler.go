@@ -3,6 +3,7 @@ package categories
 import (
 	"encoding/json"
 	"net/http"
+	"sprig/internal/common"
 	"strconv"
 )
 
@@ -16,21 +17,32 @@ func NewCategoryHandler(categoryService *CategoryService) *CategoryHandler {
 	}
 }
 
+// Create godoc
+//
+//	@Summary	Tambah category baru
+//	@Tags		categories
+//	@Accept		json
+//	@Produce	json
+//	@Param		category	body		CreateCategoryRequest	true	"Data kategori baru"
+//	@Success	201			{object}	common.SuccessResponse
+//	@Failure	400			{object}	common.ErrorResponse
+//	@Failure	422			{object}	common.ErrorResponse
+//	@Router		/api/v1/categories [post]
 func (h *CategoryHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var req CreateCategoryRequest
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"message": "invalid JSON",
+		writeJSON(w, http.StatusBadRequest, common.ErrorResponse{
+			Message: "invalid JSON",
 		})
 		return
 	}
 
 	category, err := h.categoryService.CreateCategory(req)
 	if err != nil {
-		writeJSON(w, http.StatusUnprocessableEntity, map[string]string{
-			"message": err.Error(),
+		writeJSON(w, http.StatusUnprocessableEntity, common.ErrorResponse{
+			Message: err.Error(),
 		})
 		return
 	}
@@ -41,19 +53,28 @@ func (h *CategoryHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Name:   category.Name,
 	}
 
-	writeJSON(w, http.StatusCreated, map[string]any{
-		"message": "category created successfully",
-		"data":    response,
+	writeJSON(w, http.StatusCreated, common.SuccessResponse{
+		Message: "category created successfully",
+		Data:    response,
 	})
 }
 
+// FindByName godoc
+//
+//	@Summary	Ambil detail kategori berdasarkan Nama
+//	@Tags		categories
+//	@Produce	json
+//	@Param		name	path		string	true	"Nama Kategori"
+//	@Success	200		{object}	common.SuccessResponse
+//	@Failure	404		{object}	common.ErrorResponse
+//	@Router		/api/v1/categories/{name} [get]
 func (h *CategoryHandler) FindByName(w http.ResponseWriter, r *http.Request) {
 	name := r.PathValue("name")
 
 	category, err := h.categoryService.FindCategory(name)
 	if err != nil {
-		writeJSON(w, http.StatusUnprocessableEntity, map[string]string{
-			"message": err.Error(),
+		writeJSON(w, http.StatusNotFound, common.ErrorResponse{
+			Message: err.Error(),
 		})
 		return
 	}
@@ -64,16 +85,25 @@ func (h *CategoryHandler) FindByName(w http.ResponseWriter, r *http.Request) {
 		Name:   category.Name,
 	}
 
-	writeJSON(w, http.StatusOK, map[string]any{
-		"data": response,
+	writeJSON(w, http.StatusOK, common.SuccessResponse{
+		Data: response,
 	})
 }
 
+// FindAll godoc
+//
+//	@Summary		Ambil semua kategori
+//	@Description	Mengembalikan daftar seluruh kategori
+//	@Tags			categories
+//	@Produce		json
+//	@Success		200	{object}	common.SuccessResponse
+//	@Failure		400	{object}	common.ErrorResponse
+//	@Router			/api/v1/categories [get]
 func (h *CategoryHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 	categories, err := h.categoryService.FindAllCategory()
 	if err != nil {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"message": "invalid JSON",
+		writeJSON(w, http.StatusBadRequest, common.ErrorResponse{
+			Message: "failed to get categories",
 		})
 		return
 	}
@@ -88,35 +118,50 @@ func (h *CategoryHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	writeJSON(w, http.StatusOK, map[string]any{
-		"data": responses,
+	writeJSON(w, http.StatusOK, common.SuccessResponse{
+		Data: responses,
 	})
 }
 
+// UpdateCategory godoc
+//
+//	@Summary	Update sebagian data Kategori
+//	@Tags		categories
+//	@Accept		json
+//	@Produce	json
+//	@Param		id			path		int							true	"ID Kategori"
+//	@Param		category	body		CreateCategoryUpdateRequest	true	"Field yang ingin diupdate"
+//	@Success	200			{object}	common.SuccessResponse
+//	@Failure	400			{object}	common.ErrorResponse
+//	@Failure	422			{object}	common.ErrorResponse
+//	@Router		/api/v1/categories/{id} [patch]
 func (h *CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 
-	var req CreateCategoryRequest
+	var req CreateCategoryUpdateRequest
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"message": "invalid JSON",
+		writeJSON(w, http.StatusBadRequest, common.ErrorResponse{
+			Message: "invalid JSON",
 		})
+		return
 	}
 
 	id, err := strconv.ParseUint(idStr, 10, 64)
 	if err != nil {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"message": "invalid JSON",
+		writeJSON(w, http.StatusBadRequest, common.ErrorResponse{
+			Message: "invalid JSON",
 		})
+		return
 	}
 
 	category, err := h.categoryService.UpdateCategory(id, req)
 	if err != nil {
-		writeJSON(w, http.StatusUnprocessableEntity, map[string]string{
-			"message": err.Error(),
+		writeJSON(w, http.StatusUnprocessableEntity, common.ErrorResponse{
+			Message: err.Error(),
 		})
+		return
 	}
 
 	response := CategoryResponse{
@@ -125,25 +170,34 @@ func (h *CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
 		Name:   category.Name,
 	}
 
-	writeJSON(w, http.StatusOK, map[string]any{
-		"message": "category updated successfully",
-		"data":    response,
+	writeJSON(w, http.StatusOK, common.SuccessResponse{
+		Message: "category updated successfully",
+		Data:    response,
 	})
 }
 
+// Delete godoc
+//
+//	@Summary	Hapus kategori
+//	@Tags		categories
+//	@Produce	json
+//	@Param		name	path		string	true	"Nama Kategori"
+//	@Success	200		{object}	common.SuccessResponse
+//	@Failure	422		{object}	common.ErrorResponse
+//	@Router		/api/v1/categories/{name} [delete]
 func (h *CategoryHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	name := r.PathValue("name")
 
 	err := h.categoryService.DeleteCategory(name)
 	if err != nil {
-		writeJSON(w, http.StatusUnprocessableEntity, map[string]string{
-			"message": err.Error(),
+		writeJSON(w, http.StatusUnprocessableEntity, common.ErrorResponse{
+			Message: err.Error(),
 		})
 		return
 	}
 
-	writeJSON(w, http.StatusOK, map[string]string{
-		"message": "deleted successfully",
+	writeJSON(w, http.StatusOK, common.SuccessResponse{
+		Message: "deleted successfully",
 	})
 }
 
