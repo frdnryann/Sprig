@@ -8,10 +8,9 @@ import (
 
 // List layer yang mau diinject
 type Container struct {
-	UserHandler *users.UserHandler
+	UserHandler     *users.UserHandler
 	CategoryHandler *categories.CategoryHandler
 }
-
 
 // Setiap ada DI, tambahnya disini aja
 func NewContainer(db *sql.DB) *Container {
@@ -24,7 +23,7 @@ func NewContainer(db *sql.DB) *Container {
 	categoriesHandler := categories.NewCategoryHandler(categoriesService)
 
 	return &Container{
-		UserHandler: usersHandler,
+		UserHandler:     usersHandler,
 		CategoryHandler: categoriesHandler,
 	}
 }

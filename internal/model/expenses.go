@@ -1,15 +1,15 @@
 package model
 
 import "time"
- 
+
 // ExpenseType merepresentasikan kolom enum('pengeluaran','pemasukan') di MySQL.
 type ExpenseType string
- 
+
 const (
 	ExpenseTypePengeluaran ExpenseType = "pengeluaran"
 	ExpenseTypePemasukan   ExpenseType = "pemasukan"
 )
- 
+
 type Expense struct {
 	ID          uint64      `db:"id"`
 	UserID      uint64      `db:"user_id"`

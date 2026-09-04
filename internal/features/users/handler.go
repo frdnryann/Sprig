@@ -18,15 +18,16 @@ func NewUserHandler(userService *UserService) *UserHandler {
 }
 
 // Create godoc
-// @Summary      Tambah user baru
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Param        user  body      CreateUserRequest  true  "Data user baru"
-// @Success      201   {object}  common.SuccessResponse
-// @Failure      400   {object}  common.ErrorResponse
-// @Failure 	 422   {object}  common.ErrorResponse
-// @Router       /api/v1/users [post]
+//
+//	@Summary	Tambah user baru
+//	@Tags		users
+//	@Accept		json
+//	@Produce	json
+//	@Param		user	body		CreateUserRequest	true	"Data user baru"
+//	@Success	201		{object}	common.SuccessResponse
+//	@Failure	400		{object}	common.ErrorResponse
+//	@Failure	422		{object}	common.ErrorResponse
+//	@Router		/api/v1/users [post]
 func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var req CreateUserRequest // tampung dulu di DTO
 
@@ -60,14 +61,15 @@ func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 // FindByID godoc
-// @Summary      Ambil detail user berdasarkan ID
-// @Tags         users
-// @Produce      json
-// @Param        id   path      int  true  "User ID"
-// @Success      200  {object}  common.SuccessResponse
-// @Failure      404  {object}  common.ErrorResponse
-// @Failure 	 422  {object}  common.ErrorResponse
-// @Router       /api/v1/users/{id} [get]
+//
+//	@Summary	Ambil detail user berdasarkan ID
+//	@Tags		users
+//	@Produce	json
+//	@Param		id	path		int	true	"User ID"
+//	@Success	200	{object}	common.SuccessResponse
+//	@Failure	404	{object}	common.ErrorResponse
+//	@Failure	422	{object}	common.ErrorResponse
+//	@Router		/api/v1/users/{id} [get]
 func (h *UserHandler) FindByID(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 
@@ -100,13 +102,14 @@ func (h *UserHandler) FindByID(w http.ResponseWriter, r *http.Request) {
 }
 
 // FindAll godoc
-// @Summary      Ambil semua user
-// @Description  Mengembalikan daftar seluruh user
-// @Tags         users
-// @Produce      json
-// @Success      200  {object}  common.SuccessResponse
-// @Failure      404  {object}  common.ErrorResponse
-// @Router       /api/v1/users [get]
+//
+//	@Summary		Ambil semua user
+//	@Description	Mengembalikan daftar seluruh user
+//	@Tags			users
+//	@Produce		json
+//	@Success		200	{object}	common.SuccessResponse
+//	@Failure		404	{object}	common.ErrorResponse
+//	@Router			/api/v1/users [get]
 func (h *UserHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 	users, err := h.userService.FindAllUser()
 	if err != nil {
@@ -133,16 +136,17 @@ func (h *UserHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 }
 
 // UpdateUser godoc
-// @Summary      Update sebagian data user
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Param        id    path      int   true  "User ID"
-// @Param        user  body      CreateUserRequest  true  "Field yang ingin diupdate"
-// @Success      200   {object}  common.SuccessResponse
-// @Failure      404   {object}  common.ErrorResponse
-// @Failure 	 422   {object}  common.ErrorResponse
-// @Router       /api/v1/users/{id} [patch]
+//
+//	@Summary	Update sebagian data user
+//	@Tags		users
+//	@Accept		json
+//	@Produce	json
+//	@Param		id		path		int						true	"User ID"
+//	@Param		user	body		CreateUserUpdateRequest	true	"Field yang ingin diupdate"
+//	@Success	200		{object}	common.SuccessResponse
+//	@Failure	404		{object}	common.ErrorResponse
+//	@Failure	422		{object}	common.ErrorResponse
+//	@Router		/api/v1/users/{id} [patch]
 func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 
@@ -186,14 +190,15 @@ func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 // Delete godoc
-// @Summary      Hapus user
-// @Tags         users
-// @Produce      json
-// @Param        id   path      int  true  "User ID"
-// @Success      200  {object}  common.SuccessResponse
-// @Failure      404  {object}  common.ErrorResponse
-// @Failure 	 422  {object}  common.ErrorResponse
-// @Router       /api/v1/users/{id} [delete]
+//
+//	@Summary	Hapus user
+//	@Tags		users
+//	@Produce	json
+//	@Param		id	path		int	true	"User ID"
+//	@Success	200	{object}	common.SuccessResponse
+//	@Failure	404	{object}	common.ErrorResponse
+//	@Failure	422	{object}	common.ErrorResponse
+//	@Router		/api/v1/users/{id} [delete]
 func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	idStr := r.PathValue("id")
 
